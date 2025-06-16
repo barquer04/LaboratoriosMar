@@ -10,28 +10,30 @@ import matplotlib.pyplot as plt
 import io
 import base64
 
+# Ruta base del proyecto
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = "clave_demo_segura"
 CORS(app, supports_credentials=True)
 
+# Configuración de login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-USUARIOS_FILE = os.path.join(BASE_DIR,  'data', 'usuarios.json')
+# Archivos que voy a usar
+USUARIOS_FILE = os.path.join(BASE_DIR, 'data', 'usuarios.json')
 PREGUNTAS_FILE = os.path.join(BASE_DIR, 'data', 'questions.json')
 HISTORIAL_FILE = os.path.join(BASE_DIR, 'data', 'historial.json')
 
-# ------------------------
-# MODELO DE USUARIO Prueba
-# ------------------------
+# Clase para representar a un usuario con su ID y nombre
 class User(UserMixin):
     def __init__(self, id_, username):
         self.id = id_
         self.username = username
 
+# Carga de usuario desde el archivo JSON
 @login_manager.user_loader
 def load_user(user_id):
     usuarios = cargar_json_usuarios(USUARIOS_FILE)
@@ -40,9 +42,7 @@ def load_user(user_id):
         return User(user['id'], user['username']) if user else None
     return None
 
-# ------------------------
-# FUNCIONES DE ARCHIVOS
-# ------------------------
+# Cargo usuarios desde JSON, si hay error devuelvo lista vacía
 def cargar_json_usuarios(file_path):
     if not os.path.exists(file_path):
         return []
@@ -53,6 +53,7 @@ def cargar_json_usuarios(file_path):
     except json.JSONDecodeError:
         return []
 
+# Cargo historial del archivo, o inicializo si no existe
 def cargar_json_historial(file_path):
     if not os.path.exists(file_path):
         return {"historial": []}
@@ -66,6 +67,7 @@ def cargar_json_historial(file_path):
     except json.JSONDecodeError:
         return {"historial": []}
 
+# Cargo cualquier archivo JSON como lista
 def cargar_json(file_path):
     if not os.path.exists(file_path):
         return []
@@ -75,13 +77,12 @@ def cargar_json(file_path):
     except json.JSONDecodeError:
         return []
 
+# Guardo cualquier estructura de datos en un JSON
 def guardar_json(file_path, data):
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-# ------------------------
-# RUTAS
-# ------------------------
+# Rutas principales de la app
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -96,14 +97,17 @@ def quiz():
 def profile():
     return render_template('profile.html', username=current_user.username)
 
+# Para servir el archivo de preguntas al frontend
 @app.route("/data/questions.json")
 def questions_json():
     return send_from_directory(os.path.join(BASE_DIR, 'data'), 'questions.json')
 
+# Para archivos estáticos (como style.css)
 @app.route('/<path:filename>')
 def serve_static(filename):
     return send_from_directory(app.static_folder, filename)
 
+# Registro de usuario nuevo
 @app.route("/register", methods=["POST"])
 def register():
     data = request.get_json() or {}
@@ -128,6 +132,7 @@ def register():
 
     return jsonify({"mensaje": "Usuario registrado exitosamente"}), 200
 
+# Login del usuario
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json or {}
@@ -142,12 +147,14 @@ def login():
         return jsonify({"success": True})
     return jsonify({"error": "Credenciales inválidas"}), 401
 
+# Cerrar sesión
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return jsonify({"mensaje": "Logout exitoso"})
 
+# Obtener categorías por nivel
 @app.route("/categories", methods=["GET"])
 def get_categories():
     preguntas = cargar_json(PREGUNTAS_FILE)
@@ -164,6 +171,7 @@ def get_categories():
         "categorias": {nivel: sorted(list(cats)) for nivel, cats in categorias_por_nivel.items()}
     })
 
+# Devuelvo preguntas filtradas por nivel y categoría
 @app.route("/questions", methods=["GET"])
 def get_questions():
     nivel = request.args.get("nivel", "").strip()
@@ -180,6 +188,7 @@ def get_questions():
     session["preguntas_actuales"] = deepcopy(filtradas)
     return jsonify({"questions": filtradas})
 
+# Procesar respuestas del usuario y guardar resultado
 @app.route("/submit_answers", methods=["POST"])
 @login_required
 def submit_answers():
@@ -191,7 +200,6 @@ def submit_answers():
     preguntas = cargar_json(PREGUNTAS_FILE)
     correctas_json = [p for p in preguntas if p.get('nivel') == nivel and p.get('categoria') == categoria]
 
-    # Extraer preguntas y respuestas correctas
     preguntas_planas = correctas_json[0].get("preguntas", []) if correctas_json else []
     respuestas_correctas = [p.get("respuesta", "").strip().lower() for p in preguntas_planas]
     respuestas_usuario = [str(r).strip().lower() for r in respuestas]
@@ -203,7 +211,7 @@ def submit_answers():
     total_preguntas = len(respuestas_correctas)
     puntaje = round((correctas / total_preguntas) * 100, 2) if total_preguntas > 0 else 0
 
-    # Construir feedback
+    # Armo el feedback para mostrar al final
     feedback = []
     for i in range(total_preguntas):
         pregunta = preguntas_planas[i].get("pregunta", "Pregunta no encontrada")
@@ -216,7 +224,7 @@ def submit_answers():
             "respuesta_usuario": respuesta_usuario
         })
 
-    # Guardar historial
+    # Registro el resultado en historial
     resultado_guardar = {
         "usuario_id": current_user.id,
         "nivel": nivel,
@@ -239,6 +247,7 @@ def submit_answers():
         "feedback": feedback
     })
 
+# Devuelvo historial del usuario actual
 @app.route("/history", methods=["GET"])
 @login_required
 def get_history():
@@ -250,51 +259,41 @@ def get_history():
     user_history.sort(key=lambda x: x.get('fecha', ''), reverse=True)
     return jsonify({"historial": user_history})
 
+# Genero gráfico tipo donut con los puntajes del usuario
 @app.route("/grafico")
 @login_required
 def grafico():
-    # Cargar el historial de datos
     historial_data = cargar_json_historial(HISTORIAL_FILE)
 
-    # Filtrar el historial del usuario actual
     user_history = [
         h for h in historial_data.get("historial", [])
         if str(h.get('usuario_id')) == str(current_user.id)
     ]
-
-    # Si no hay datos de historial para el usuario
+    
     if not user_history:
         return Response(status=204)
 
-    # Etiquetas y puntajes para el gráfico
     labels = [f"{h['nivel']} - {h['categoria']}" for h in user_history]
     scores = [h['puntaje'] for h in user_history]
 
-    # Crear gráfico de donut con tamaño reducido
-    fig, ax = plt.subplots(figsize=(4, 4))  # más pequeño que antes
+    fig, ax = plt.subplots(figsize=(4, 4))
 
-    # Gráfico de pie con estilo donut
     wedges, texts, autotexts = ax.pie(
         scores, labels=labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors
     )
 
-    # Borde a las secciones
     for wedge in wedges:
         wedge.set_edgecolor('black')
 
-    # Agujero central
     centre_circle = plt.Circle((0, 0), 0.60, color='white', fc='white', edgecolor='black')
     ax.add_artist(centre_circle)
 
-    # Quitar ejes y ajustar forma
     ax.axis('equal')
     ax.axis('off')
 
-    # Tamaño del texto
     plt.setp(texts, size=6)
     plt.setp(autotexts, size=5)
 
-    # Guardar imagen sin bordes
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0.05)
     buf.seek(0)

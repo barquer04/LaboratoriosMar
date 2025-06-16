@@ -9,6 +9,7 @@
   <h1>Quiz de Python</h1>
 
   <div class="quiz-container">
+    <!-- Aquí elijo el nivel y la categoría del quiz -->
     <div class="quiz-controls">
       <label for="nivel">Nivel:</label>
       <select id="nivel" onchange="cargarCategorias()"></select>
@@ -17,31 +18,36 @@
       <select id="categoria"></select>
     </div>
 
+    <!-- Botón para empezar y para ir al perfil -->
     <div class="quiz-buttons">
       <button onclick="cargarPreguntas()">Iniciar Quiz</button>
       <button onclick="window.location.href='/profile'">Ver Perfil</button>
     </div>
 
+    <!-- Aquí van apareciendo las preguntas -->
     <div id="quiz-container"></div>
   </div>
 
   <script>
+    // Variables para manejar preguntas y respuestas
     let preguntasJSON = [];
     let preguntasActuales = [];
     let indice = 0;
     let respuestas = [];
 
+    // Al cargar la página, traigo las preguntas del archivo JSON
     window.onload = async function () {
       try {
         const response = await fetch('/data/questions.json');
         preguntasJSON = await response.json();
-        cargarNiveles();
+        cargarNiveles(); // Lleno el combo de niveles
       } catch (error) {
         alert('Error cargando las preguntas');
         console.error(error);
       }
     };
 
+    // Extraigo niveles únicos y los agrego al select
     function cargarNiveles() {
       const niveles = [...new Set(preguntasJSON.map(p => p.nivel))];
       const nivelSelect = document.getElementById('nivel');
@@ -54,9 +60,10 @@
         nivelSelect.appendChild(option);
       });
 
-      cargarCategorias();
+      cargarCategorias(); // Al cargar niveles, también actualizo categorías
     }
 
+    // Filtro las categorías según el nivel elegido
     function cargarCategorias() {
       const nivel = document.getElementById('nivel').value;
       const categorias = preguntasJSON
@@ -75,6 +82,7 @@
       });
     }
 
+    // Filtro las preguntas según nivel y categoría seleccionados
     function cargarPreguntas() {
       const nivel = document.getElementById('nivel').value;
       const categoria = document.getElementById('categoria').value;
@@ -83,21 +91,24 @@
         p.nivel === nivel && p.categoria === categoria
       );
 
+      // Si no hay preguntas para esa combinación
       if (!entrada || !entrada.preguntas || entrada.preguntas.length === 0) {
         document.getElementById('quiz-container').innerHTML = '<p>No hay preguntas disponibles para esta selección.</p>';
         preguntasActuales = [];
         return;
       }
 
+      // Inicializo todo para mostrar la primera pregunta
       preguntasActuales = entrada.preguntas;
       indice = 0;
       respuestas = new Array(preguntasActuales.length).fill("");
       mostrarPregunta();
     }
 
+    // Muestro una pregunta con sus opciones
     function mostrarPregunta() {
       const contenedor = document.getElementById('quiz-container');
-      contenedor.innerHTML = '';
+      contenedor.innerHTML = ''; // Limpio lo anterior
 
       const pregunta = preguntasActuales[indice];
       if (!pregunta) return;
@@ -106,6 +117,7 @@
       div.className = 'pregunta';
       div.innerHTML = `<p><strong>Pregunta ${indice + 1} de ${preguntasActuales.length}:</strong> ${pregunta.pregunta}</p>`;
 
+      // Agrego opciones como radio buttons
       pregunta.opciones.forEach((opcion, i) => {
         const opcionId = `pregunta${indice}_opcion${i}`;
         div.innerHTML += `
@@ -118,20 +130,22 @@
 
       contenedor.appendChild(div);
 
+      // Cuando elijo una respuesta, guardo la selección y paso a la siguiente
       const radios = document.getElementsByName(`pregunta${indice}`);
       radios.forEach(radio => {
         radio.onchange = () => {
           respuestas[indice] = radio.value;
           indice++;
           if (indice < preguntasActuales.length) {
-            mostrarPregunta();
+            mostrarPregunta(); // Muestro la siguiente
           } else {
-            enviarResultados();
+            enviarResultados(); // Si ya respondí todas, las envío
           }
         };
       });
     }
 
+    // Envío los resultados al backend y luego paso al perfil
     function enviarResultados() {
       const nivel = document.getElementById('nivel').value;
       const categoria = document.getElementById('categoria').value;
@@ -145,8 +159,9 @@
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          // Guardo los resultados en sessionStorage para mostrarlos en el perfil
           sessionStorage.setItem("resultado_quiz", JSON.stringify(data));
-          window.location.href = '/profile';
+          window.location.href = '/profile'; // Redirijo al perfil
         } else {
           alert('Error al guardar resultado');
         }

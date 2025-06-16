@@ -3,5 +3,10 @@
         "id": 1,
         "username": "Mar Barquero",
         "password": "scrypt:32768:8:1$0YeW1cmIxfjE9gWW$81befe21fa306d643850eab71fb90eef1a4666414c6d51b5e8c36a99cf7066fe19db49d6a6845a3708226793bbf7140723836143799efaeb575ea5e482b82854"
+    },
+    {
+        "id": 2,
+        "username": "yo",
+        "password": "scrypt:32768:8:1$P2WNEf9iaFg2kTtR$4abcec62584f88146fb91ebc3809382ec3bd649a20e0de0b8eeeacf5824a6e58a1fdb4f6cdc4d04f474b208e3f5771cf20aaadd3cc01419fbc28e5a4e0014a5e"
     }
 ]

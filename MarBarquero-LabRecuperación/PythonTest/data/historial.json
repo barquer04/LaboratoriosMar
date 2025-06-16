@@ -17,6 +17,15 @@
             "correctas": 5,
             "total": 5,
             "fecha": "2025-06-16 13:32:38"
+        },
+        {
+            "usuario_id": 2,
+            "nivel": "Básico",
+            "categoria": "Condicionales",
+            "puntaje": 100.0,
+            "correctas": 5,
+            "total": 5,
+            "fecha": "2025-06-16 15:12:07"
         }
     ]
 }
