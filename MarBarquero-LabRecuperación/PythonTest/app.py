@@ -25,7 +25,7 @@ PREGUNTAS_FILE = os.path.join(BASE_DIR, 'data', 'questions.json')
 HISTORIAL_FILE = os.path.join(BASE_DIR, 'data', 'historial.json')
 
 # ------------------------
-# MODELO DE USUARIO
+# MODELO DE USUARIO Prueba
 # ------------------------
 class User(UserMixin):
     def __init__(self, id_, username):
