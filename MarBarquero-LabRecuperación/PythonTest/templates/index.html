@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz Python - Registro e Inicio de Sesión</title>
+  <!-- Aquí se enlaza la hoja de estilos que está en la carpeta static -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="index-body">
+
+  <!-- Esta es la sección del formulario de registro, se muestra por defecto al cargar la página -->
+  <div id="registerSection" class="container">
+    <h2>Registrar nuevo usuario</h2>
+    <form id="registerForm" autocomplete="off" novalidate>
+      <input type="text" id="registerUsername" placeholder="Usuario" required autocomplete="username" />
+      <input type="password" id="registerPassword" placeholder="Contraseña" required autocomplete="new-password" />
+      <button type="submit">Registrar</button>
+      <p class="error" id="registerError"></p>
+    </form>
+    <div class="center">
+      <!-- Esta opción permite cambiar al formulario de inicio de sesión -->
+      <span class="toggle" onclick="toggleForms()">¿Ya tienes cuenta? Inicia sesión</span>
+    </div>
+  </div>
+
+  <!-- Este es el formulario de inicio de sesión. Al principio está oculto con la clase "hidden" -->
+  <div id="loginSection" class="container hidden">
+    <h2>Iniciar sesión</h2>
+    <form id="loginForm" autocomplete="off" novalidate>
+      <input type="text" id="loginUsername" placeholder="Usuario" required autocomplete="username" />
+      <input type="password" id="loginPassword" placeholder="Contraseña" required autocomplete="current-password" />
+      <button type="submit">Entrar</button>
+      <p class="error" id="loginError"></p>
+    </form>
+    <div class="center">
+      <!-- Esta opción permite volver al formulario de registro -->
+      <span class="toggle" onclick="toggleForms()">¿No tienes cuenta? Regístrate</span>
+    </div>
+  </div>
+
+  <script>
+    // Esta función cambia entre las secciones de registro e inicio de sesión
+    function toggleForms() {
+      document.getElementById('registerSection').classList.toggle('hidden');
+      document.getElementById('loginSection').classList.toggle('hidden');
+
+      // Limpia los mensajes de error cuando se cambia de formulario
+      document.getElementById('registerError').textContent = '';
+      document.getElementById('loginError').textContent = '';
+    }
+
+    // Este bloque se encarga de gestionar el envío del formulario de registro
+    document.getElementById('registerForm').addEventListener('submit', async e => {
+      e.preventDefault(); // Evita que el formulario se recargue
+
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
+
+      // Validación básica para evitar campos vacíos
+      if (!username || !password) {
+        document.getElementById('registerError').textContent = 'Por favor ingresa usuario y contraseña.';
+        return;
+      }
+
+      try {
+        // Envío de los datos al backend para registrar un nuevo usuario
+        const res = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        // Si el servidor responde con éxito, se avisa al usuario y se cambia al login
+        if (data.mensaje) {
+          alert('Usuario registrado con éxito. Ahora puedes iniciar sesión.');
+          document.getElementById('registerForm').reset();
+          toggleForms();
+        } else {
+          // Si hubo un error, se muestra el mensaje correspondiente
+          document.getElementById('registerError').textContent = data.error || 'Error en registro';
+        }
+      } catch (err) {
+        // Si hubo un problema de conexión
+        document.getElementById('registerError').textContent = 'Error de conexión con el servidor.';
+        console.error(err);
+      }
+    });
+
+    // Este bloque se encarga de gestionar el envío del formulario de inicio de sesión
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      // Validación básica para evitar campos vacíos
+      if (!username || !password) {
+        document.getElementById('loginError').textContent = 'Por favor ingresa usuario y contraseña.';
+        return;
+      }
+
+      try {
+        // Envío de los datos al backend para verificar las credenciales
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        // Si las credenciales son válidas, se redirige al quiz
+        if (data.success) {
+          window.location.href = '/quiz';
+        } else {
+          // Si son incorrectas, se muestra un mensaje
+          document.getElementById('loginError').textContent = data.error || 'Credenciales inválidas';
+        }
+      } catch (err) {
+        // Si hubo un problema de conexión
+        document.getElementById('loginError').textContent = 'Error de conexión con el servidor.';
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>

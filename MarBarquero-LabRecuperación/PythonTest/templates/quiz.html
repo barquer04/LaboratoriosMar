@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Python</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="quiz-body">
+  <h1>Quiz de Python</h1>
+
+  <div class="quiz-container">
+    <div class="quiz-controls">
+      <label for="nivel">Nivel:</label>
+      <select id="nivel" onchange="cargarCategorias()"></select>
+
+      <label for="categoria">Categoría:</label>
+      <select id="categoria"></select>
+    </div>
+
+    <div class="quiz-buttons">
+      <button onclick="cargarPreguntas()">Iniciar Quiz</button>
+      <button onclick="window.location.href='/profile'">Ver Perfil</button>
+    </div>
+
+    <div id="quiz-container"></div>
+  </div>
+
+  <script>
+    let preguntasJSON = [];
+    let preguntasActuales = [];
+    let indice = 0;
+    let respuestas = [];
+
+    window.onload = async function () {
+      try {
+        const response = await fetch('/data/questions.json');
+        preguntasJSON = await response.json();
+        cargarNiveles();
+      } catch (error) {
+        alert('Error cargando las preguntas');
+        console.error(error);
+      }
+    };
+
+    function cargarNiveles() {
+      const niveles = [...new Set(preguntasJSON.map(p => p.nivel))];
+      const nivelSelect = document.getElementById('nivel');
+      nivelSelect.innerHTML = '';
+
+      niveles.forEach(nivel => {
+        const option = document.createElement('option');
+        option.value = nivel;
+        option.textContent = nivel;
+        nivelSelect.appendChild(option);
+      });
+
+      cargarCategorias();
+    }
+
+    function cargarCategorias() {
+      const nivel = document.getElementById('nivel').value;
+      const categorias = preguntasJSON
+        .filter(p => p.nivel === nivel)
+        .map(p => p.categoria);
+
+      const unicas = [...new Set(categorias)];
+      const categoriaSelect = document.getElementById('categoria');
+      categoriaSelect.innerHTML = '';
+
+      unicas.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        categoriaSelect.appendChild(option);
+      });
+    }
+
+    function cargarPreguntas() {
+      const nivel = document.getElementById('nivel').value;
+      const categoria = document.getElementById('categoria').value;
+
+      const entrada = preguntasJSON.find(p =>
+        p.nivel === nivel && p.categoria === categoria
+      );
+
+      if (!entrada || !entrada.preguntas || entrada.preguntas.length === 0) {
+        document.getElementById('quiz-container').innerHTML = '<p>No hay preguntas disponibles para esta selección.</p>';
+        preguntasActuales = [];
+        return;
+      }
+
+      preguntasActuales = entrada.preguntas;
+      indice = 0;
+      respuestas = new Array(preguntasActuales.length).fill("");
+      mostrarPregunta();
+    }
+
+    function mostrarPregunta() {
+      const contenedor = document.getElementById('quiz-container');
+      contenedor.innerHTML = '';
+
+      const pregunta = preguntasActuales[indice];
+      if (!pregunta) return;
+
+      const div = document.createElement('div');
+      div.className = 'pregunta';
+      div.innerHTML = `<p><strong>Pregunta ${indice + 1} de ${preguntasActuales.length}:</strong> ${pregunta.pregunta}</p>`;
+
+      pregunta.opciones.forEach((opcion, i) => {
+        const opcionId = `pregunta${indice}_opcion${i}`;
+        div.innerHTML += `
+          <label class="opcion" for="${opcionId}">
+            <input type="radio" name="pregunta${indice}" id="${opcionId}" value="${opcion}">
+            ${opcion}
+          </label>
+        `;
+      });
+
+      contenedor.appendChild(div);
+
+      const radios = document.getElementsByName(`pregunta${indice}`);
+      radios.forEach(radio => {
+        radio.onchange = () => {
+          respuestas[indice] = radio.value;
+          indice++;
+          if (indice < preguntasActuales.length) {
+            mostrarPregunta();
+          } else {
+            enviarResultados();
+          }
+        };
+      });
+    }
+
+    function enviarResultados() {
+      const nivel = document.getElementById('nivel').value;
+      const categoria = document.getElementById('categoria').value;
+
+      fetch('/submit_answers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ respuestas, nivel, categoria })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          sessionStorage.setItem("resultado_quiz", JSON.stringify(data));
+          window.location.href = '/profile';
+        } else {
+          alert('Error al guardar resultado');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error en la conexión');
+      });
+    }
+  </script>
+</body>
+</html>

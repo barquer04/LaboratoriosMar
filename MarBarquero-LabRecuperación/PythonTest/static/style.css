@@ -1,0 +1,354 @@
+/* Reset básico para eliminar márgenes y mantener consistencia visual */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f3f3f3;
+  color: #444;
+  line-height: 1.7;
+}
+
+/* Estilo principal para la pantalla de inicio (login y registro) */
+body.index-body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ececec;
+  padding: 20px;
+}
+
+.container {
+  max-width: 400px;
+  width: 100%;
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.container h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid #d1d1d1;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #5e4b8b;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #5e4b8b;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #4c3c75;
+}
+
+.error {
+  color: #ff4d4d;
+  font-size: 14px;
+  margin-top: -10px;
+  min-height: 18px;
+}
+
+.hidden {
+  display: none;
+}
+
+.center {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.toggle {
+  color: #5e4b8b;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+}
+
+/* Estilo general del body en el quiz */
+body.quiz-body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f8f8;
+  color: #444;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.quiz-body h1 {
+  font-size: 2.2rem;
+  margin: 40px 0 20px;
+  color: #444;
+  text-align: center;
+}
+
+/* Contenedor principal del quiz */
+.quiz-container {
+  background-color: #ffffff;
+  width: 90%;
+  max-width: 700px;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+/* Controles de filtro de preguntas (nivel y categoría) */
+.quiz-controls {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.quiz-body label {
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+.quiz-body select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+  font-size: 0.95rem;
+}
+
+/* Botones del quiz */
+.quiz-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.quiz-body button {
+  padding: 8px 18px;
+  background-color: #5e4b8b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-body button:hover {
+  background-color: #4c3c75;
+}
+
+/* Contenedor de cada pregunta y sus opciones */
+.pregunta {
+  background-color: #fefefe;
+  padding: 20px;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.pregunta p {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.opcion {
+  display: block;
+  margin: 8px 0 8px 15px;
+  font-weight: normal;
+}
+
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+/* Vista de perfil del usuario y sus resultados */
+body.profile-body {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 20px;
+  background-color: #f4f4f4;
+  font-family: 'Poppins', sans-serif;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+.card h1,
+.card h2 {
+  color: #444;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Tabla de resultados */
+.profile-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 0.95rem;
+}
+
+.profile-body th,
+.profile-body td {
+  border: 1px solid #e0e0e0;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.profile-body th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #444;
+}
+
+.profile-body td {
+  background-color: #ffffff;
+  color: #444;
+}
+
+.no-data {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  padding: 15px 0;
+}
+
+.profile-body button {
+  margin-top: 20px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #5e4b8b;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.profile-body button:hover {
+  background-color: #4c3c75;
+}
+
+/* Contenedor del gráfico de resultados */
+#graficoResultados {
+  width: 80%;
+  height: 30%;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  margin-top: 15px;
+}
+
+/* Zona donde se muestra el feedback por pregunta */
+#feedbackContainer {
+  margin-top: 30px;
+}
+
+#feedbackContainer .card {
+  margin-top: 10px;
+}
+
+#feedbackContainer table {
+  margin-top: 10px;
+  background-color: #fff;
+  font-size: 0.9rem;
+}
+
+/* Colores para celdas de respuestas según su tipo */
+.correct {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+}
+
+.incorrect {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+.respuesta-correcta {
+  background-color: #c3e6cb !important;
+  color: #155724 !important;
+}
+
+/* Ajustes visuales en pantallas pequeñas */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+  }
+
+  .profile-body table,
+  #feedbackContainer table {
+    font-size: 0.85rem;
+  }
+
+  .profile-body button {
+    width: 100%;
+  }
+}

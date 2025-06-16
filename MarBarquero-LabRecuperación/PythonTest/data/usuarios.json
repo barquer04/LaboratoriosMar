@@ -1,0 +1,7 @@
+[
+    {
+        "id": 1,
+        "username": "Mar Barquero",
+        "password": "scrypt:32768:8:1$0YeW1cmIxfjE9gWW$81befe21fa306d643850eab71fb90eef1a4666414c6d51b5e8c36a99cf7066fe19db49d6a6845a3708226793bbf7140723836143799efaeb575ea5e482b82854"
+    }
+]
