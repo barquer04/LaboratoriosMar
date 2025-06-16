@@ -1,0 +1,281 @@
+[
+  {
+    "nivel": "Básico",
+    "categoria": "Condicionales",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué hace if x > 3?",
+        "opciones": ["Evalúa si x es igual a 3", "Evalúa si x es mayor que 3", "Suma 3 a x"],
+        "respuesta": "Evalúa si x es mayor que 3"
+      },
+      {
+        "pregunta": "¿Cuál es la estructura básica de un if en Python?",
+        "opciones": ["if condición:", "for condición:", "while condición:"],
+        "respuesta": "if condición:"
+      },
+      {
+        "pregunta": "¿Qué palabra clave se usa para la alternativa en un if?",
+        "opciones": ["else", "elif", "then"],
+        "respuesta": "else"
+      },
+      {
+        "pregunta": "¿Cómo se verifica si dos valores son iguales?",
+        "opciones": ["x != y", "x = y", "x == y"],
+        "respuesta": "x == y"
+      },
+      {
+        "pregunta": "¿Qué hace elif en una estructura condicional?",
+        "opciones": ["Termina el if", "Una condición adicional", "Inicia un bucle"],
+        "respuesta": "Una condición adicional"
+      }
+    ]
+  },
+  {
+    "nivel": "Básico",
+    "categoria": "Bucles",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué imprime: for i in range(2): print(i)?",
+        "opciones": ["0 1", "1 2", "0 1 2"],
+        "respuesta": "0 1"
+      },
+      {
+        "pregunta": "¿Cuál es la función de un bucle while?",
+        "opciones": ["Detener un programa", "Ejecutar una vez", "Repetir mientras la condición sea verdadera"],
+        "respuesta": "Repetir mientras la condición sea verdadera"
+      },
+      {
+        "pregunta": "¿Qué palabra se usa para saltar a la siguiente iteración?",
+        "opciones": ["continue", "break", "pass"],
+        "respuesta": "continue"
+      },
+      {
+        "pregunta": "¿Qué hace break en un bucle?",
+        "opciones": ["Inicia el bucle", "Salta una iteración", "Termina el bucle"],
+        "respuesta": "Termina el bucle"
+      },
+      {
+        "pregunta": "¿Cómo se crea un bucle que se repite 5 veces?",
+        "opciones": ["loop 5 times", "while 5:", "for i in range(5):"],
+        "respuesta": "for i in range(5):"
+      }
+    ]
+  },
+  {
+    "nivel": "Básico",
+    "categoria": "Variables",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué es una variable?",
+        "opciones": ["Una función", "Un espacio para almacenar datos", "Un tipo de dato"],
+        "respuesta": "Un espacio para almacenar datos"
+      },
+      {
+        "pregunta": "¿Cómo se asigna un valor a una variable?",
+        "opciones": ["10 = x", "x = 10", "x := 10"],
+        "respuesta": "x = 10"
+      },
+      {
+        "pregunta": "¿Qué tipo de dato es 'Hola'?",
+        "opciones": ["String", "Entero", "Booleano"],
+        "respuesta": "String"
+      },
+      {
+        "pregunta": "¿Cuál es el tipo de dato para números enteros?",
+        "opciones": ["str", "int", "bool"],
+        "respuesta": "int"
+      },
+      {
+        "pregunta": "¿Se puede cambiar el valor de una variable?",
+        "opciones": ["Solo en funciones", "No", "Sí"],
+        "respuesta": "Sí"
+      }
+    ]
+  },
+  {
+    "nivel": "Intermedio",
+    "categoria": "Listas",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué hace lista.append(5)?",
+        "opciones": ["Suma todos los valores", "Elimina 5", "Agrega 5"],
+        "respuesta": "Agrega 5"
+      },
+      {
+        "pregunta": "¿Cómo se accede al primer elemento de una lista llamada lista?",
+        "opciones": ["lista[1]", "lista[0]", "lista.first"],
+        "respuesta": "lista[0]"
+      },
+      {
+        "pregunta": "¿Cómo se elimina un elemento por índice?",
+        "opciones": ["del lista[2]", "lista.remove(2)", "lista.pop()"],
+        "respuesta": "del lista[2]"
+      },
+      {
+        "pregunta": "¿Qué método devuelve y elimina el último elemento?",
+        "opciones": ["delete()", "remove()", "pop()"],
+        "respuesta": "pop()"
+      },
+      {
+        "pregunta": "¿Cómo se obtiene la longitud de una lista?",
+        "opciones": ["len(lista)", "lista.length", "count(lista)"],
+        "respuesta": "len(lista)"
+      }
+    ]
+  },
+  {
+    "nivel": "Intermedio",
+    "categoria": "Funciones",
+    "preguntas": [
+      {
+        "pregunta": "¿Cómo se define una función en Python?",
+        "opciones": ["def mi_funcion():", "function mi_funcion()", "func mi_funcion()"],
+        "respuesta": "def mi_funcion():"
+      },
+      {
+        "pregunta": "¿Para qué sirve return en una función?",
+        "opciones": ["Para imprimir un valor", "Para devolver un valor", "Para definir una variable"],
+        "respuesta": "Para devolver un valor"
+      },
+      {
+        "pregunta": "¿Cómo se llama a una función llamada saludar?",
+        "opciones": ["func saludar()", "call saludar", "saludar()"],
+        "respuesta": "saludar()"
+      },
+      {
+        "pregunta": "¿Se pueden pasar parámetros a funciones?",
+        "opciones": ["Sí", "Solo en funciones especiales", "No"],
+        "respuesta": "Sí"
+      },
+      {
+        "pregunta": "¿Qué pasa si una función no tiene return?",
+        "opciones": ["Devuelve 0", "Error", "Devuelve None"],
+        "respuesta": "Devuelve None"
+      }
+    ]
+  },
+  {
+    "nivel": "Intermedio",
+    "categoria": "Diccionarios",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué es un diccionario en Python?",
+        "opciones": ["Lista ordenada", "Colección de pares clave-valor", "Conjunto de números"],
+        "respuesta": "Colección de pares clave-valor"
+      },
+      {
+        "pregunta": "¿Cómo se accede a un valor con clave 'nombre'?",
+        "opciones": ["diccionario(nombre)", "diccionario.nombre", "diccionario['nombre']"],
+        "respuesta": "diccionario['nombre']"
+      },
+      {
+        "pregunta": "¿Cómo se agrega un par clave-valor?",
+        "opciones": ["diccionario['edad'] = 30", "diccionario.add('edad',30)", "diccionario.push('edad',30)"],
+        "respuesta": "diccionario['edad'] = 30"
+      },
+      {
+        "pregunta": "¿Cómo se elimina una clave?",
+        "opciones": ["diccionario.remove('edad')", "del diccionario['edad']", "diccionario.delete('edad')"],
+        "respuesta": "del diccionario['edad']"
+      },
+      {
+        "pregunta": "¿Qué método devuelve las claves de un diccionario?",
+        "opciones": ["keys()", "values()", "items()"],
+        "respuesta": "keys()"
+      }
+    ]
+  },
+  {
+    "nivel": "Avanzado",
+    "categoria": "Decoradores",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué es un decorador?",
+        "opciones": ["Función que modifica otra", "Clase que hereda", "Una lista de funciones"],
+        "respuesta": "Función que modifica otra"
+      },
+      {
+        "pregunta": "¿Cómo se aplica un decorador a una función?",
+        "opciones": ["Con herencia", "Usando función.decorador()", "@decorador encima de la función"],
+        "respuesta": "@decorador encima de la función"
+      },
+      {
+        "pregunta": "¿Para qué se usan los decoradores?",
+        "opciones": ["Para crear clases", "Para modificar comportamiento sin cambiar la función", "Para manejar errores"],
+        "respuesta": "Para modificar comportamiento sin cambiar la función"
+      },
+      {
+        "pregunta": "¿Un decorador puede tomar argumentos?",
+        "opciones": ["Sí", "No", "Solo en Python 3"],
+        "respuesta": "Sí"
+      },
+      {
+        "pregunta": "¿Cuál es el símbolo usado para aplicar decoradores?",
+        "opciones": ["$", "#", "@"],
+        "respuesta": "@"
+      }
+    ]
+  },
+  {
+    "nivel": "Avanzado",
+    "categoria": "Programación Orientada a Objetos",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué es una clase?",
+        "opciones": ["Un módulo", "Un tipo de función", "Plantilla para crear objetos"],
+        "respuesta": "Plantilla para crear objetos"
+      },
+      {
+        "pregunta": "¿Qué es un objeto?",
+        "opciones": ["Una función", "Instancia de una clase", "Una variable global"],
+        "respuesta": "Instancia de una clase"
+      },
+      {
+        "pregunta": "¿Qué es herencia?",
+        "opciones": ["Una clase que deriva de otra", "Una función dentro de una clase", "Un método privado"],
+        "respuesta": "Una clase que deriva de otra"
+      },
+      {
+        "pregunta": "¿Para qué sirve el método __init__?",
+        "opciones": ["Inicializar atributos", "Destruir objetos", "Ejecutar funciones"],
+        "respuesta": "Inicializar atributos"
+      },
+      {
+        "pregunta": "¿Qué palabra clave indica herencia?",
+        "opciones": ["def Subclase():", "class Subclase(ClasePadre):", "class Subclase extends ClasePadre:"],
+        "respuesta": "class Subclase(ClasePadre):"
+      }
+    ]
+  },
+  {
+    "nivel": "Avanzado",
+    "categoria": "Manejo de Excepciones",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué hace try-except?",
+        "opciones": ["Detiene el programa", "Ejecuta código varias veces", "Captura errores para evitar que el programa se caiga"],
+        "respuesta": "Captura errores para evitar que el programa se caiga"
+      },
+      {
+        "pregunta": "¿Cómo se lanza una excepción?",
+        "opciones": ["raise Exception('error')", "throw Exception", "except Exception"],
+        "respuesta": "raise Exception('error')"
+      },
+      {
+        "pregunta": "¿Qué palabra clave se usa para código que siempre se ejecuta?",
+        "opciones": ["end", "else", "finally"],
+        "respuesta": "finally"
+      },
+      {
+        "pregunta": "¿Qué hace el bloque else en manejo de excepciones?",
+        "opciones": ["Se ejecuta si no hubo excepciones", "Se ejecuta siempre", "Se ejecuta si hay excepción"],
+        "respuesta": "Se ejecuta si no hubo excepciones"
+      },
+      {
+        "pregunta": "¿Qué pasa si no se captura una excepción?",
+        "opciones": ["Se ignora", "El programa termina con error", "Se ejecuta el finally"],
+        "respuesta": "El programa termina con error"
+      }
+    ]
+  }
+]

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil de Usuario</title>
+  <!-- Cargo los estilos desde la carpeta static -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="profile-body">
+
+  <!-- Esta tarjeta muestra los datos del usuario actualmente logueado -->
+  <div class="card">
+    <h1>Perfil</h1>
+    <p><b>Usuario:</b> {{ username }}</p>
+  </div>
+
+  <!-- Acá muestro el último feedback del quiz, incluyendo puntaje, cantidad correcta y total -->
+  <div id="feedbackContainer" class="card feedback-container">
+    <h2>Último Feedback del Quiz</h2>
+    <p>
+      <strong>Puntaje:</strong> <span id="puntaje"></span>% |
+      <strong>Correctas:</strong> <span id="correctas"></span> de <span id="total"></span>
+    </p>
+
+    <!-- Esta tabla se rellena dinámicamente con los datos de cada pregunta -->
+    <table id="feedbackTable" class="feedback-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Pregunta</th>
+          <th>Tu Respuesta</th>
+          <th>Respuesta Correcta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="4" class="no-data">Cargando feedback...</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Este botón permite ocultar la sección de feedback -->
+    <button onclick="limpiarFeedback()">Ocultar Feedback</button>
+  </div>
+
+  <!-- Aquí se muestra el gráfico de rendimiento del usuario -->
+  <div class="card">
+    <h2>Gráfico de Resultados</h2>
+    <img id="graficoResultados" src="/grafico" alt="Gráfico de resultados" class="grafico-img" />
+  </div>
+
+  <!-- Historial de todas las evaluaciones realizadas por el usuario -->
+  <div class="card">
+    <h2>Historial de Evaluaciones</h2>
+    <table id="historyTable" class="profile-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Nivel</th>
+          <th>Categoría</th>
+          <th>Puntaje (%)</th>
+          <th>Correctas</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="no-data" colspan="6">Cargando historial...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Este botón permite volver a hacer otro quiz -->
+  <button onclick="window.location.href='/quiz'" class="btn-volver">Hacer otro quiz</button>
+
+  <script>
+    // Esta función obtiene el historial de intentos del usuario desde el backend y los muestra en la tabla
+    async function cargarHistorial() {
+      try {
+        const res = await fetch('/history', { credentials: 'include' });
+        const data = await res.json();
+        const tbody = document.querySelector('#historyTable tbody');
+        tbody.innerHTML = ''; // Limpio el contenido anterior
+
+        // Si hay historial, se agrega cada fila con sus respectivos datos
+        if (data.historial && data.historial.length > 0) {
+          data.historial.forEach(item => {
+            const fecha = new Date(item.fecha);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${fecha.toLocaleString('es-CR')}</td>
+              <td>${item.nivel || '-'}</td>
+              <td>${item.categoria || '-'}</td>
+              <td>${(item.puntaje ?? 0).toFixed(2)}</td>
+              <td>${item.correctas ?? 0}</td>
+              <td>${item.total ?? 0}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          // Si no hay historial disponible, se muestra un mensaje
+          tbody.innerHTML = '<tr><td class="no-data" colspan="6">No hay historial disponible.</td></tr>';
+        }
+      } catch (err) {
+        console.error("Error al cargar historial:", err);
+      }
+    }
+
+    // Esta función toma los resultados guardados en sessionStorage y los muestra como feedback
+    function cargarFeedback() {
+      const resultado = JSON.parse(sessionStorage.getItem("resultado_quiz") || "null");
+      if (!resultado || !resultado.feedback) return;
+
+      // Muestro el contenedor del feedback si hay datos
+      document.getElementById("feedbackContainer").style.display = "block";
+      document.getElementById("puntaje").textContent = resultado.puntaje ?? 0;
+      document.getElementById("correctas").textContent = resultado.correctas ?? 0;
+      document.getElementById("total").textContent = resultado.total ?? 0;
+
+      const tbody = document.querySelector("#feedbackTable tbody");
+      tbody.innerHTML = ''; // Limpio filas anteriores
+
+      // Por cada pregunta, agrego una fila con la pregunta, respuesta del usuario y la correcta
+      resultado.feedback.forEach((item, index) => {
+        const row = document.createElement("tr");
+
+        // Verifico si la respuesta fue correcta
+        const correcta = (item.respuesta_usuario ?? "").trim().toLowerCase() ===
+                         (item.respuesta_correcta ?? "").trim().toLowerCase();
+
+        // Aplico clases para resaltar si fue correcta o incorrecta
+        const respuestaUsuarioClass = correcta ? "correct" : "incorrect";
+        const respuestaCorrectaClass = "correct";  // Siempre muestro la correcta en verde
+
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${item.pregunta}</td>
+          <td class="${respuestaUsuarioClass}">${item.respuesta_usuario || '-'}</td>
+          <td class="${respuestaCorrectaClass}">${item.respuesta_correcta || '-'}</td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    // Esta función borra los datos del feedback y oculta la sección
+    function limpiarFeedback() {
+      sessionStorage.removeItem("resultado_quiz");
+      document.getElementById("feedbackContainer").style.display = "none";
+    }
+
+    // Llamo ambas funciones al cargar la página para que se vean los datos actualizados
+    cargarHistorial();
+    cargarFeedback();
+  </script>
+</body>
+</html>

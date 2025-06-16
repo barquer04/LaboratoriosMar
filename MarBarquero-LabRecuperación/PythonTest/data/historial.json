@@ -1,0 +1,22 @@
+{
+    "historial": [
+        {
+            "usuario_id": 1,
+            "nivel": "Básico",
+            "categoria": "Condicionales",
+            "puntaje": 100.0,
+            "correctas": 5,
+            "total": 5,
+            "fecha": "2025-06-16 13:14:28"
+        },
+        {
+            "usuario_id": 1,
+            "nivel": "Básico",
+            "categoria": "Condicionales",
+            "puntaje": 100.0,
+            "correctas": 5,
+            "total": 5,
+            "fecha": "2025-06-16 13:32:38"
+        }
+    ]
+}
